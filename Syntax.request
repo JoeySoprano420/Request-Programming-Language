@@ -1,0 +1,15 @@
+@entry
+fn main() -> unit {
+    lock mem(0x0040, 64) // Secure a memory block
+    thread.start(4) // Spawn 4 static threads
+    cycle.sync(pulse:32) // Align execution cycles
+
+    let x: fixed(32) = 128
+    let y: fixed(32) = impeller.flow(x, override: manual)
+
+    if (error.check(y)) {
+        error.handle(y, strict)
+    }
+
+    export state("computed-result", y)
+}
